@@ -1,0 +1,10 @@
+name: Assignmnent
+account: jordiordonez
+server: shinyapps.io
+appId: 114432
+bundleId: 504897
+url: https://jordiordonez.shinyapps.io/Assignmnent/
+when: 1468507720.50974
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: model.R
