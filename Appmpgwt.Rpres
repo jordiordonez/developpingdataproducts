@@ -1,0 +1,64 @@
+MPG prediction shiny app
+========================================================
+author: Jordi ORDONEZ
+date: 15/07/2016
+autosize: true
+
+An app presentation : [MPG app](https://jordiordonez.shinyapps.io/Assignmnent/)
+
+Purpose
+========================================================
+
+Developping a shiny app for predicting Miles per gallon of gas a car can drive depending on some basic features. This work will be droven on dataset `mtcars` using R following this path :
+
+1. Exploratory analysis to get the most significative features.
+2. Build a prediction model.
+3. Develop an app with input some features giving as output mpg with some error measure.
+
+Exploratory Analysis :
+========================================================
+
+```{r}
+library(randomForest)
+data("mtcars")
+set.seed(1000)
+fit<-randomForest(mpg~.,data = mtcars)
+ord<-order(importance(fit),decreasing = TRUE)
+importance(fit)[ord,]
+```
+
+Features selection
+========================================================
+<br><br>
+
+We can guess a strong relationship between car's weight and mpg, which is confirmed with the plot `mpg` by `wt`, and the linear model seems accurate : 
+
+*** 
+
+```{r, echo=FALSE}
+library(ggplot2)
+fit<-lm(mpg~wt,data=mtcars)
+ggplot(mtcars, aes(x = wt, y = mpg)) + 
+  geom_point() +
+  stat_smooth(method = "lm", col = "red")
+```
+
+
+Model selection
+========================================================
+
+After considering `disp` importance we decide to fit our models depending on high or low `disp` (above the median or not) 
+
+```{r, echo=FALSE}
+summary(mtcars$disp)
+```
+
+```{r, echo=TRUE, eval=FALSE}
+fit<-lm(mpg~wt,data=mtcars)
+pred<-function(wt) predict(fit, data.frame(wt=wt), interval="predict")
+data1<-mtcars[mtcars$disp<196.3,]
+data2<-mtcars[-(mtcars$disp<196.3),]
+fit1<-lm(mpg~wt,data=data1)
+fit2<-lm(mpg~wt,data=data2)
+```
+
